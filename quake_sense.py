@@ -1,4 +1,3 @@
-pip install streamlit pandas scikit-learn matplotlib
 import streamlit as st
 import pandas as pd
 import numpy as np
