@@ -119,13 +119,24 @@ depth_pred = model_depth.predict(input_data)[0]
 mag_pred = model_mag.predict(input_data)[0]
 
 # Calculate predicted date
-predicted_date = datetime.fromtimestamp(time + time_pred)
+# Convert the current epoch time to a datetime object
+current_time = datetime.fromtimestamp(time)
 
-# Display predictions
-st.write("### Prediction Results")
-st.write(f"Predicted Date: **{predicted_date.strftime('%Y-%m-%d %H:%M')}**")
-st.write(f"Predicted Location: **Lat {lat_pred:.2f}, Long {long_pred:.2f}, Depth {depth_pred:.2f} km**")
-st.write(f"Predicted Magnitude: **{mag_pred:.2f}**")
+# Add the predicted time (in seconds) as a timedelta
+predicted_date = current_time + timedelta(seconds=time_pred)
+
+# Get today's date (without time)
+today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+# Display predictions only if the predicted date is today or in the future
+if predicted_date >= today:
+    st.write("### Prediction Results")
+    st.write(f"Predicted Date: **{predicted_date.strftime('%Y-%m-%d %H:%M')}**")
+    st.write(f"Predicted Location: **Lat {lat_pred:.2f}, Long {long_pred:.2f}, Depth {depth_pred:.2f} km**")
+    st.write(f"Predicted Magnitude: **{mag_pred:.2f}**")
+else:
+    st.write("### Prediction Results")
+    st.warning("No future events predicted.")
 
 # Visualizations
 st.write("### Data Visualization")
